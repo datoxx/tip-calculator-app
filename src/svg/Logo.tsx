@@ -21,7 +21,7 @@ const attrs = styled.svg.attrs({
     width: 87px;
     height: 54px;
     margin-top: 50px;
-    @media (min-width: 768px){
+    @media (min-width: 1024px){
         margin-top: 163px;
     }
   `;
