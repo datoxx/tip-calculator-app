@@ -1,6 +1,9 @@
+/* eslint-disable array-callback-return */
 import styled from "styled-components";
 import Dollar from "../svg/Dollar"
 import Person from "../svg/Person"
+import NumberInputComponent from "./NumberInputComponent";
+import PercentageInputComponent from './PercentageInputComponent';
 
 interface InputsProps {
     bill: string|number,
@@ -16,77 +19,57 @@ interface InputsProps {
 
 const InputsMainComponent = ({bill, setBill, tip, setTip, customTip, setCustomTip, peopleNum, setPeopleNum}:InputsProps ) => {
 
-    const handleInputNubers = (e: React.ChangeEvent<HTMLInputElement>):void => {
-        if(e.target.id === "Bill") {
-         setBill(e.target.value) 
-        } else {
-          setPeopleNum(e.target.value)
-        }
-      }
-    
-      const handleTip = (e: any):void => {
-        setCustomTip("")
-        const number = e.target.value.slice(0,-1);
-        setTip(number);
-    
-      }
-    
-      const handleCustomTip = (e: React.ChangeEvent<HTMLInputElement>):void => {
-        setTip("")
-        setCustomTip(e.target.value)
-      }
+  const percentageArray: string[] = ['5%', '10%', '15%', '25%', '50%'];
 
-      
-    return ( 
-        <InputsContainer>
-          <NumberInputWraper>
-            <InputLabel htmlFor="Bill">
-             Bill
-            </InputLabel>
-            <IconAndInput errorColor = {false }>
-              <Dollar />
-              <NumberInput 
-                value={bill}
-                onChange={handleInputNubers}
-                id="Bill" 
-                type="number" 
-                placeholder="0"
-              />
-            </IconAndInput>
-          </NumberInputWraper>
+  const handleCustomTip = (e: React.ChangeEvent<HTMLInputElement>):void => {
+    setTip("")
+    setCustomTip(e.target.value)
+  }
 
-          <MainPercentageInputsWraper>
-            <InputLabel>Select Tip %</InputLabel>
-            <PercentageInputsContainer>
-              <PercentageInput setColor={tip === '5'} type="button" value="5%" onClick={handleTip} /> 
-              <PercentageInput  setColor={tip === '10'} type="button" value="10%" onClick={handleTip} /> 
-              <PercentageInput  setColor={tip === '15'} type="button" value="15%" onClick={handleTip} /> 
-              <PercentageInput setColor={tip === '25'}  type="button" value="25%" onClick={handleTip} /> 
-              <PercentageInput  setColor={tip === '50'} type="button" value="50%" onClick={handleTip} /> 
-              <CustomPercentageInput type="number" placeholder="Custom" value={customTip} onChange={handleCustomTip}  />
-            </PercentageInputsContainer>
-          </MainPercentageInputsWraper>
+    
+  return ( 
+    <InputsContainer>
+      <NumberInputWraper>
+        <InputLabel htmlFor="Bill">Bill</InputLabel>
+        <NumberInputComponent 
+            icon={Dollar} 
+            value={bill} 
+            errorColor={false} 
+            setNumber={setBill} 
+            id="Bill" 
+        />
+      </NumberInputWraper>
 
-          <NumberInputWraper>
-            <LabelAndErrorContainer>
-              <InputLabel htmlFor="People">
-                Number of People
-                </InputLabel>
-                {bill !== '' && peopleNum <= 0 && <ErrorText>Can’t be zero</ErrorText>}
-            </LabelAndErrorContainer>
-              <IconAndInput  errorColor = {bill !== '' && peopleNum <= 0 }>
-                <Person />
-                <NumberInput 
-                  value={peopleNum}
-                  onChange={handleInputNubers}
-                  id="People" 
-                  type="number" 
-                  placeholder="0" 
-                />
-              </IconAndInput>
-          </NumberInputWraper>
-        </InputsContainer>
-     );
+      <MainPercentageInputsWraper>
+        <InputLabel>Select Tip %</InputLabel>
+        <PercentageInputsContainer>
+          {percentageArray.map((percentage):any => <PercentageInputComponent 
+                key={percentage} 
+                percentage={percentage} 
+                tip={tip} 
+                setTip={setTip} 
+                setCustomTip={setCustomTip} 
+            /> 
+            )}
+          <CustomPercentageInput type="number" placeholder="Custom" value={customTip} onChange={handleCustomTip}  />
+        </PercentageInputsContainer>
+      </MainPercentageInputsWraper>
+
+      <NumberInputWraper>
+        <LabelAndErrorContainer>
+          <InputLabel htmlFor="People"> Number of People</InputLabel>
+            {bill !== '' && peopleNum <= 0 && <ErrorText>Can’t be zero</ErrorText>}
+        </LabelAndErrorContainer>
+        <NumberInputComponent 
+            icon={Person} 
+            value={peopleNum} 
+            errorColor={bill !== '' && peopleNum <= 0} 
+            setNumber={setPeopleNum} 
+            id="People"  
+        />
+      </NumberInputWraper>
+    </InputsContainer>
+  );
 }
  
 export default InputsMainComponent;
@@ -125,50 +108,6 @@ const ErrorText = styled.span`
   text-align: right;   
   color: #E17457;
 `
-
-interface ErorrProps  {
-  errorColor: boolean,
-}
-
-const IconAndInput = styled.div<ErorrProps>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 48px;
-  background: #F3F9FA;
-  padding: 6px 17.5px 6px 19.3px;
-  border-radius: 5px;
-  border:  ${(props) => props.errorColor ? '#E17457 2px solid' : '' };
-  &:hover {
-    cursor: pointer;
-  }
-  &:focus-within {
-    outline: 2px solid #26C2AE;
-  }
-`
-
-const NumberInput = styled.input`
-  all: unset;
-  box-sizing: border-box;
-  height: 100%;
-  width: 250px;
-  text-align:right;
-  color: #00474B;
-  font-size: 24px;
-  line-height: 36px;
-  &::placeholder {
-    opacity: 0.35;
-  }
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  @media (min-width: 1024px){
-    width: 350px;
-    }
-`
-
 const MainPercentageInputsWraper = styled.div`
   display: flex;
   flex-direction: column;
@@ -186,35 +125,6 @@ const PercentageInputsContainer = styled.div`
     }
 `
 
-interface InputColorProps  {
-  setColor: boolean,
-}
-
-
-const PercentageInput = styled.input<InputColorProps>`
-  all: unset;
-  box-sizing: border-box;
-  background: ${(props) => props.setColor ?  '#26C2AE' : '#00474B'} ;
-  color: ${(props) => props.setColor ? '#00474B' : '#FFFFFF' } ;
-  max-width: 146px;
-  width: 100%;
-  height: 48px;
-  border-radius: 5px;
-  font-size: 24px;
-  line-height: 36px;
-  text-align: center;
-  padding: 6px 0 6px 0;
-  &:hover {
-    cursor: pointer;
-    background: #9FE8DF;
-    color: #00474B;
-  }
-  @media (min-width: 1024px){
-      max-width: 117px;
-      width: 100%;
-    }
-
-`
 const CustomPercentageInput = styled.input`
   all: unset;
   box-sizing: border-box;

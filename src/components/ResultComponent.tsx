@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import ResultNumberComponent from './ResultNumberComponent';
 
 interface ResultProps {
     bill: string|number,
@@ -9,12 +10,18 @@ interface ResultProps {
     setCustomTip: (e:string) => void,
     peopleNum: string|number,
     setPeopleNum: (e:string) => void,
-    tipAmount: number,
-    total: number,
 }
 
+const ResultComponent = ({bill, setBill, tip, setTip, customTip, setCustomTip, peopleNum, setPeopleNum}:ResultProps ) => {
 
-const Result = ({bill, setBill, tip, setTip, customTip, setCustomTip, peopleNum, setPeopleNum, tipAmount, total}:ResultProps ) => {
+  let tipAmount = customTip === ""
+    ? ((Number(tip)/100) *Number(bill))/Number(peopleNum) 
+    :( (Number(customTip)/100) *Number(bill))/Number(peopleNum);
+
+  let total = customTip === "" 
+    ? (((100 + Number(tip))/100)*Number(bill))/Number(peopleNum) 
+    : (((100 + Number(customTip))/100)*Number(bill))/Number(peopleNum);
+
 
 
     const handleReset = () => {
@@ -27,19 +34,12 @@ const Result = ({bill, setBill, tip, setTip, customTip, setCustomTip, peopleNum,
     return ( 
         <MainResultContainer>
         <TipAmountResultContainer>
-          <TitleWraper>
-            <ResultTitle>Tip Amount</ResultTitle>
-            <ResultSubTitle>/ person</ResultSubTitle>
-          </TitleWraper>
-          <ResultNumber>${peopleNum > 0 ? tipAmount.toFixed(2) : 0.00.toFixed(2)}</ResultNumber>
+          <ResultNumberComponent title="Tip Amount" peopleNum={peopleNum} amount={tipAmount} />
         </TipAmountResultContainer>
 
         <TotalResultContainer>
-          <TitleWraper>
-            <ResultTitle>Total</ResultTitle>
-            <ResultSubTitle>/ person</ResultSubTitle>
-          </TitleWraper>
-          <ResultNumber>${peopleNum > 0 ? total.toFixed(2) : 0.00.toFixed(2)}</ResultNumber>
+        <ResultNumberComponent title="Tip Amount" peopleNum={peopleNum} amount={total} />
+
         </TotalResultContainer>
 
         <RestButoon setColor={bill === '' && tip === '' && customTip === '' && peopleNum === ''} onClick={handleReset}>RESET</RestButoon>
@@ -47,7 +47,7 @@ const Result = ({bill, setBill, tip, setTip, customTip, setCustomTip, peopleNum,
      );
 }
  
-export default Result;
+export default ResultComponent;
 
 const MainResultContainer = styled.div`
   display: flex;
@@ -78,33 +78,6 @@ const TotalResultContainer = styled.div`
     align-items: center;
     margin-top: 25px;
 
-`
-const TitleWraper = styled.div`
-    display: flex;
-    flex-direction: column;
-
-`
-const ResultTitle = styled.div`
-  font-size: 16px;
-  line-height: 24px;
-  color: #FFFFFF;
-`
-const ResultSubTitle = styled.div`
-  font-size: 13px;
-  line-height: 19px;
-  color: #7F9D9F;
-`
-const ResultNumber = styled.div`
-  font-size: 32px;
-  line-height: 47px;
-  text-align: right;
-  letter-spacing: -0.666667px;
-  color: #26C2AE;
-  @media (min-width: 1024px){
-    font-size: 48px;
-    line-height: 71px;
-    letter-spacing: -1px;
-  }
 `
 
 interface RestButoonProps  {

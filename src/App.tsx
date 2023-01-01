@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Logo from "./svg/Logo"
 import { useState } from "react";
 import InputsMainComponent from './components/InputsMainComponent';
-import Result from './components/Result';
+import ResultComponent from './components/ResultComponent';
 
 
 function App() {
@@ -11,15 +11,6 @@ function App() {
   const [tip, setTip] = useState<string|number>('')
   const [customTip, setCustomTip] = useState<string|number>('')
   const [peopleNum, setPeopleNum] = useState<string|number>('')
-
-  let tipAmount = customTip === ""
-     ? ((Number(tip)/100) *Number(bill))/Number(peopleNum) 
-     :( (Number(customTip)/100) *Number(bill))/Number(peopleNum);
-  
-  let total = customTip === "" 
-    ? (((100 + Number(tip))/100)*Number(bill))/Number(peopleNum) 
-    : (((100 + Number(customTip))/100)*Number(bill))/Number(peopleNum);
-  
 
   return (
     <MainWrapper>
@@ -36,7 +27,7 @@ function App() {
           setPeopleNum={setPeopleNum}
          />
         
-        <Result 
+        <ResultComponent 
           bill={bill} 
           setBill={setBill} 
           tip={tip} 
@@ -45,8 +36,6 @@ function App() {
           setCustomTip={setCustomTip} 
           peopleNum={peopleNum} 
           setPeopleNum={setPeopleNum}
-          tipAmount={tipAmount}
-          total={total}
         />     
       </CalculatorContainer>
     </MainWrapper>
