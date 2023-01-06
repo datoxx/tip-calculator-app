@@ -12,6 +12,7 @@ interface NumberInputProps {
 const NumberInputComponent = ({icon, value, errorColor, setNumber, id}:NumberInputProps) => {
 
   const handleInputNubers = (e: React.ChangeEvent<HTMLInputElement>):void => {
+    if(e.target.value.length >= 7) return
     if(e.target.id === id) {
       setNumber(e.target.value) 
     } else {
