@@ -22,6 +22,7 @@ const InputsMainComponent = ({bill, setBill, tip, setTip, customTip, setCustomTi
   const percentageArray: string[] = ['5%', '10%', '15%', '25%', '50%'];
 
   const handleCustomTip = (e: React.ChangeEvent<HTMLInputElement>):void => {
+    if( Number(e.target.value) > 100) return
     setTip("")
     setCustomTip(e.target.value)
   }
@@ -51,7 +52,7 @@ const InputsMainComponent = ({bill, setBill, tip, setTip, customTip, setCustomTi
                 setCustomTip={setCustomTip} 
             /> 
             )}
-          <CustomPercentageInput type="number" placeholder="Custom" value={customTip} onChange={handleCustomTip}  />
+          <CustomPercentageInput type="number"  placeholder="Custom" value={customTip} onChange={handleCustomTip}  />
         </PercentageInputsContainer>
       </MainPercentageInputsWraper>
 
